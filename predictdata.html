@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f7fa; /* Light gray background */
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Smooth shadow */
+            text-align: center;
+            animation: fadeIn 1s ease-in-out; /* Smooth fade-in animation */
+        }
+
+        /* Header Styles */
+        h1 {
+            color: #f8128c; /* Bright blue for main title */
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            letter-spacing: 1px;
+        }
+
+        /* Subheading Styles */
+        h2 {
+            color: #50c7f6; /* Green for subheadings */
+            font-size: 1.8rem;
+            margin-top: 20px;
+            border-bottom: 2px solid #f8128c;
+            padding-bottom: 10px;
+        }
+
+        /* Paragraph and Label Styling */
+        p {
+            font-size: 1.1rem;
+            margin: 10px 0;
+        }
+
+        strong {
+            color: #50c7f6; /* Red for emphasized text */
+        }
+
+        /* Button Styles */
+        button {
+            padding: 12px 25px;
+            background-color: #f8128c;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2b98c0;
+        }
+
+        /* Link Styling */
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #34c5db;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #40d9ff;
+        }
+
+        /* Report Display */
+        #reportDisplay {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            background-color: #ecf0f1; /* Light gray background */
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); /* Light shadow */
+            display: none;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #ccc; /* Light gray border */
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8128c; /* Header background color */
+            color: white; /* Header text color */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            button {
+                font-size: 0.9rem;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Prediction Result</h1>
+        
+        <!-- Centered prediction content -->
+        <div class="prediction-results">
+            <p><strong>Diabetes Prediction:</strong> {{ result }}</p>
+            <p><strong>Diabetes Type:</strong> {{ diabetes_type }}</p>
+            <p><strong>Diabetes Level:</strong> {{ diabetes_level }}</p>
+        </div>
+       
+        <!-- Form to generate the report -->
+        <form id="reportForm">
+            <input type="hidden" name="result" value="{{ result }}">
+            <input type="hidden" name="diabetes_type" value="{{ diabetes_type }}">
+            <input type="hidden" name="diabetes_level" value="{{ diabetes_level }}">
+            
+            <input type="hidden" name="Pregnancies" value="{{ request.form.get('Pregnancies') }}">
+            <input type="hidden" name="Glucose" value="{{ request.form.get('Glucose') }}">
+            <input type="hidden" name="BloodPressure" value="{{ request.form.get('BloodPressure') }}">
+            <input type="hidden" name="SkinThickness" value="{{ request.form.get('SkinThickness') }}">
+            <input type="hidden" name="Insulin" value="{{ request.form.get('Insulin') }}">
+            <input type="hidden" name="BMI" value="{{ request.form.get('BMI') }}">
+            <input type="hidden" name="DiabetesPedigreeFunction" value="{{ request.form.get('DiabetesPedigreeFunction') }}">
+            <input type="hidden" name="Age" value="{{ request.form.get('Age') }}">
+            <button type="button" id="generateReportBtn">Generate Report</button>
+        </form>
+
+        <div id="reportDisplay">
+            <h2>Report</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody id="reportContent">
+                    <tr>
+                        <td>Diabetes Prediction</td>
+                        <td>{{ result }}</td>
+                    </tr>
+                    <tr>
+                        <td>Diabetes Type</td>
+                        <td>{{ diabetes_type }}</td>
+                    </tr>
+                    <tr>
+                        <td>Diabetes Level</td>
+                        <td>{{ diabetes_level }}</td>
+                    </tr>
+                    <tr>
+                        <td>Pregnancies</td>
+                        <td>{{ request.form.get('Pregnancies') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Glucose</td>
+                        <td>{{ request.form.get('Glucose') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Blood Pressure</td>
+                        <td>{{ request.form.get('BloodPressure') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Skin Thickness</td>
+                        <td>{{ request.form.get('SkinThickness') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Insulin</td>
+                        <td>{{ request.form.get('Insulin') }}</td>
+                    </tr>
+                    <tr>
+                        <td>BMI</td>
+                        <td>{{ request.form.get('BMI') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Diabetes Pedigree Function</td>
+                        <td>{{ request.form.get('DiabetesPedigreeFunction') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Age</td>
+                        <td>{{ request.form.get('Age') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <a id="downloadLink" href="#">Download Report</a>
+        </div>
+
+        <a href="/">Go back</a>
+    </div>
+
+    <script>
+        document.getElementById("generateReportBtn").addEventListener("click", function() {
+            const form = document.getElementById("reportForm");
+            const formData = new FormData(form);
+    
+            // Create HTML table rows from form data
+            const reportContent = `
+            <html>
+                <head>
+                    <title>Diabetes Prediction Report</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid #ddd; padding: 8px; }
+                        th { background-color: #f2f2f2; }
+                        h2 { text-align: center; }
+                    </style>
+                </head>
+                <body>
+                    <h2>Diabetes Prediction Report</h2>
+                    <table>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Value</th>
+                        </tr>
+                        <tr>
+                            <td>Diabetes Prediction</td>
+                            <td>${formData.get('result')}</td>
+                        </tr>
+                        <tr>
+                            <td>Diabetes Type</td>
+                            <td>${formData.get('diabetes_type')}</td>
+                        </tr>
+                        <tr>
+                            <td>Diabetes Level</td>
+                            <td>${formData.get('diabetes_level')}</td>
+                        </tr>
+                        <tr>
+                            <td>Pregnancies</td>
+                            <td>${formData.get('Pregnancies')}</td>
+                        </tr>
+                        <tr>
+                            <td>Glucose</td>
+                            <td>${formData.get('Glucose')}</td>
+                        </tr>
+                        <tr>
+                            <td>Blood Pressure</td>
+                            <td>${formData.get('BloodPressure')}</td>
+                        </tr>
+                        <tr>
+                            <td>Skin Thickness</td>
+                            <td>${formData.get('SkinThickness')}</td>
+                        </tr>
+                        <tr>
+                            <td>Insulin</td>
+                            <td>${formData.get('Insulin')}</td>
+                        </tr>
+                        <tr>
+                            <td>BMI</td>
+                            <td>${formData.get('BMI')}</td>
+                        </tr>
+                        <tr>
+                            <td>Diabetes Pedigree Function</td>
+                            <td>${formData.get('DiabetesPedigreeFunction')}</td>
+                        </tr>
+                        <tr>
+                            <td>Age</td>
+                            <td>${formData.get('Age')}</td>
+                        </tr>
+                    </table>
+                </body>
+            </html>
+            `;
+    
+            // Create Blob for HTML content
+            const blob = new Blob([reportContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const downloadLink = document.getElementById("downloadLink");
+            downloadLink.href = url;
+            downloadLink.download = 'diabetes_prediction_report.html';  // Set file name to .html
+            downloadLink.style.display = 'block';
+    
+            // Display the report on the page
+            document.getElementById("reportDisplay").style.display = 'block';
+        });
+    </script>
+    
